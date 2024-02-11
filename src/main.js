@@ -8,7 +8,7 @@ const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
 let lightBox;
 
-hideLoader(); // Виклик функції приховання завантажувача за замовчуванням
+hideLoader();
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ form.addEventListener('submit', async (e) => {
         createGallery(images);
     } catch (error) {
         console.log(error);
-        showErrorToast();
+        showToast('An error occurred while fetching images. Please try again!', 'error');
     } finally {
         e.target.reset();
         hideLoader();
@@ -44,7 +44,7 @@ function getPhotoByName() {
 
 function createGallery(images) {
     if (images.hits.length === 0) {
-        showNoImagesToast();
+        showToast('Sorry, there are no images matching your search query. Please try again!', 'warning');
     } else {
         const link = images.hits
             .map(
@@ -92,23 +92,10 @@ function hideLoader() {
     loader.style.display = 'none';
 }
 
-function showNoImagesToast() {
-    iziToast.show({
-        message:
-            'Sorry, there are no images matching your search query. Please try again!',
-        messageColor: '#FFFFFF',
-        backgroundColor: '#EF4040',
-        position: 'topRight',
-        messageSize: '16px',
-        messageLineHeight: '24px',
-        maxWidth: '432px',
-    });
-}
-
-function showErrorToast() {
-    iziToast.error({
-        title: 'Error',
-        message: 'An error occurred while fetching images. Please try again!',
+function showToast(message, type) {
+    iziToast[type]({
+        title: type === 'error' ? 'Error' : null,
+        message: message,
         position: 'topRight',
     });
 }
