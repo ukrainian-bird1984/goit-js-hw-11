@@ -26,6 +26,16 @@ function getPhoto(event) {
       title: 'Error',
       message: 'Please enter a search query',
     });
+    return; 
+  }
+
+  if (/\s/.test(searchQuery)) {
+        iziToast.show({
+      title: 'Error',
+      message: 'Search query cannot contain spaces',
+    });
+    searchInput.value = ''; 
+    return;
   }
 
   const BASE_URL = 'https://pixabay.com';
@@ -52,7 +62,13 @@ function getPhoto(event) {
     .catch(error => {
       console.log('Error fetching data:', error);
       loader.classList.remove('visible');
+      iziToast.show({
+        title: 'Error',
+        message: 'Failed to fetch data. Please check your internet connection.',
+      });
     });
+
+  searchInput.value = '';
 }
 
 function makeMarkup(
